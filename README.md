@@ -15,7 +15,7 @@ git submodule add git://github.com/chikamichi/mediawiki.vim.git bundle/mediawiki
 
 ``` sh
 cd ~/.local/src
-git clone git://github.com/chikamichi/mediawiki.vim.git
+git clone git://github.com/chikamichi/mediawiki.vim.git # or download/extract mediawiki.tar.gz
 cp -R mediawiki.vim/syntax/* ~/.vim/syntax/
 cp -R mediawiki.vim/ftdetect/* ~/.vim/ftdetect/
 ```

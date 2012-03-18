@@ -2,6 +2,8 @@
 
 This holds a syntax highlighter for MediaWiki-based projects, mostly Wikipedia.
 
+Files ending in `.wiki` will be highlighted. To force highlighting on any file, run `setfiletype mediawiki`.
+
 ### Install for pathogen
 
     cd ~/.vim/

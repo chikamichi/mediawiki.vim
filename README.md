@@ -1,6 +1,6 @@
 ## mediawiki.vim
 
-This holds a syntax highlighter for MediaWiki-based projects, mostly Wikipedia.
+**This holds a syntax highlighter for MediaWiki-based projects, mostly Wikipedia.**
 
 Files ending in `.wiki` will be highlighted. To force highlighting on any file, run `:setfiletype mediawiki`.
 
@@ -11,7 +11,7 @@ cd ~/.vim/
 git submodule add git://github.com/chikamichi/mediawiki.vim.git bundle/mediawiki
 ```
 
-### Manually Install
+### Manual install
 
 ``` sh
 cd ~/.local/src
@@ -84,7 +84,7 @@ setlocal fdm=expr
 
 ### Credits, licence
 
-See comments within plugin/vim-mediawiki.vim. Basically this is public domain.
+See comments within `syntax/vim-mediawiki.vim`. Basically this is public domain.
 
 Thanks to folks at http://en.wikipedia.org/wiki/Wikipedia:Text_editor_support!
 

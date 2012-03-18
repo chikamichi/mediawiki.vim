@@ -6,6 +6,8 @@ Files ending in `.wiki` will be highlighted. To force highlighting on any file, 
 
 ### Install for pathogen
 
+Head to [pathogen.vim](https://github.com/tpope/vim-pathogen) if you don't know what it is yet.
+
 ``` sh
 cd ~/.vim/
 git submodule add git://github.com/chikamichi/mediawiki.vim.git bundle/mediawiki

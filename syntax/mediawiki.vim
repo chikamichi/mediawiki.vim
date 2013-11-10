@@ -164,7 +164,8 @@ sy region wikiLink start="\[gopher:" end="\]" oneline contains=wikiNowiki,wikiNo
 sy region wikiLink start="\[news:"   end="\]" oneline contains=wikiNowiki,wikiNowikiEndTag
 sy region wikiLink start="\[mailto:" end="\]" oneline contains=wikiNowiki,wikiNowikiEndTag
 
-sy region wikiTemplate start="{{" end="}}" contains=wikiNowiki,wikiNowikiEndTag
+syn match wikiTemplateName /{{\s*\w\+/hs=s+2 contained
+sy region wikiTemplate start="{{" end="}}" keepend extend contains=wikiNowiki,wikiNowikiEndTag,wikiTemplateName,wikiTemplate,wikiLink
 
 sy match wikiParaFormatChar /^[\:|\*|;|#]\+/
 sy match wikiParaFormatChar /^-----*/
@@ -274,6 +275,7 @@ HtmlHiLink wikiH6 htmlTitle
 
 HtmlHiLink wikiLink           htmlLink
 HtmlHiLink wikiTemplate       htmlSpecial
+HtmlHiLink wikiTemplateName   Type
 HtmlHiLink wikiParaFormatChar htmlSpecial
 HtmlHiLink wikiPre            htmlConstant
 HtmlHiLink wikiRef            htmlComment

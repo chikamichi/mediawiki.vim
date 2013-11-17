@@ -139,6 +139,28 @@ sy include @TeX syntax/tex.vim
 sy region wikiTeX matchgroup=htmlTag start="<math>" end="<\/math>"  contains=@texMathZoneGroup,wikiNowiki,wikiNowikiEndTag
 sy region wikiRef matchgroup=htmlTag start="<ref>"  end="<\/ref>"   contains=wikiNowiki,wikiNowikiEndTag
 
+sy cluster wikiText contains=wikiLink,wikiTemplate,wikiNowiki,wikiNowikiEndTag,wikiItalic,wikiBold,wikiBoldAndItalic
+
+" Tables
+sy cluster wikiTableFormat contains=wikiTemplate,htmlString,htmlArg,htmlValue
+sy region wikiTable matchgroup=wikiTableSeparator start="{|" end="|}" contains=wikiTableHeaderLine,wikiTableCaptionLine,wikiTableNewRow,wikiTableHeadingCell,wikiTableNormalCell,@wikiText
+sy match  wikiTableSeparator /^!/ contained
+sy match  wikiTableSeparator /^|/ contained
+sy match  wikiTableSeparator /^|[+-]/ contained
+sy match  wikiTableSeparator /||/ contained
+sy match  wikiTableSeparator /!!/ contained
+sy match  wikiTableFormatEnd /[!|]/ contained
+sy match  wikiTableHeadingCell /\(^!\|!!\)\([^!|]*|\)\?.*/ contains=wikiTableSeparator,@wikiText,wikiTableHeadingFormat
+" Require at least one '=' in the format, to avoid spurious matches (e.g.
+" the | in [[foo|bar]] might be taken as the final |, indicating the beginning
+" of the cell). The same is done for wikiTableNormalFormat below.
+sy match  wikiTableHeadingFormat /\%(^!\|!!\)[^!|]\+=[^!|]\+\([!|]\)\(\1\)\@!/me=e-1 contains=@wikiTableFormat,wikiTableSeparator nextgroup=wikiTableFormatEnd
+sy match  wikiTableNormalCell /\(^|\|||\)\([^|]*|\)\?.*/ contains=wikiTableSeparator,@wikiText,wikiTableNormalFormat
+sy match  wikiTableNormalFormat /\(^|\|||\)[^|]\+=[^|]\+||\@!/me=e-1 contains=@wikiTableFormat,wikiTableSeparator nextgroup=wikiTableFormatEnd
+sy match  wikiTableHeaderLine /\(^{|\)\@<=.*$/ contained contains=@wikiTableFormat
+sy match  wikiTableCaptionLine /^|+.*$/ contained contains=wikiTableSeparator,@wikiText
+sy match  wikiTableNewRow /^|-.*$/ contained contains=wikiTableSeparator,@wikiTableFormat
+
 sy cluster wikiTop contains=@Spell,wikiLink,wikiNowiki,wikiNowikiEndTag
 
 sy region wikiItalic        start=+'\@<!'''\@!+ end=+''+    oneline contains=@wikiTop,wikiItalicBold
@@ -285,6 +307,10 @@ HtmlHiLink wikiRef            htmlComment
 HtmlHiLink htmlPre            wikiPre
 HtmlHiLink wikiSource         wikiPre
 HtmlHiLink wikiSyntaxHL       wikiPre
+
+HtmlHiLink wikiTableSeparator Statement
+HtmlHiLink wikiTableFormatEnd wikiTableSeparator
+HtmlHiLink wikiTableHeadingCell htmlBold
 
 
 let b:current_syntax = "html"

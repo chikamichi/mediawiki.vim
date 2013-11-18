@@ -179,6 +179,7 @@ sy region wikiH6 start="^======" end="======" oneline contains=@wikiTop
 
 sy region wikiLink start="\[\[" end="\]\]\(s\|'s\|es\|ing\|\)" oneline contains=wikiLink,wikiNowiki,wikiNowikiEndTag
 
+sy region wikiLink start="https\?://" end="\W*\_s"me=s-1 oneline
 sy region wikiLink start="\[http:"   end="\]" oneline contains=wikiNowiki,wikiNowikiEndTag
 sy region wikiLink start="\[https:"  end="\]" oneline contains=wikiNowiki,wikiNowikiEndTag
 sy region wikiLink start="\[ftp:"    end="\]" oneline contains=wikiNowiki,wikiNowikiEndTag

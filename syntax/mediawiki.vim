@@ -118,7 +118,7 @@ endif
 "
 " With wikiPre, indented lines would be rendered differently from
 " unindented lines.
-sy match htmlPreTag       /<pre>/         contains=htmlTag
+sy match htmlPreTag       /<pre\>[^>]*>/         contains=htmlTag
 sy match htmlPreEndTag    /<\/pre>/       contains=htmlEndTag
 sy match wikiNowikiTag    /<nowiki>/      contains=htmlTag
 sy match wikiNowikiEndTag /<\/nowiki>/    contains=htmlEndTag
@@ -130,7 +130,7 @@ sy match wikiSyntaxHLEndTag /<\/syntaxhighlight>/    contains=htmlEndTag
 " Note: Cannot use 'start="<pre>"rs=e', so still have the <pre> tag
 " highlighted correctly via separate sy-match. Unfortunately, this will
 " also highlight <pre> tags inside the preformatted region.
-sy region htmlPre    start="<pre>"                 end="<\/pre>"me=e-6    contains=htmlPreTag
+sy region htmlPre    start="<pre\>[^>]*>"                 end="<\/pre>"me=e-6    contains=htmlPreTag
 sy region wikiNowiki start="<nowiki>"              end="<\/nowiki>"me=e-9 contains=wikiNowikiTag
 sy region wikiSource start="<source\s\+[^>]\+>"         keepend end="<\/source>"me=e-9 contains=wikiSourceTag
 sy region wikiSyntaxHL start="<syntaxhighlight\s\+[^>]\+>" keepend end="<\/syntaxhighlight>"me=e-18 contains=wikiSyntaxHLTag

@@ -282,6 +282,7 @@ HtmlHiLink wikiParaFormatChar htmlSpecial
 HtmlHiLink wikiPre            htmlConstant
 HtmlHiLink wikiRef            htmlComment
 
+HtmlHiLink htmlPre            wikiPre
 HtmlHiLink wikiSource         wikiPre
 HtmlHiLink wikiSyntaxHL       wikiPre
 

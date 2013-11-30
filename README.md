@@ -6,14 +6,7 @@ Files ending in `.wiki` will be highlighted. To force highlighting on any file, 
 
 ### Install for pathogen
 
-Head to [pathogen.vim](https://github.com/tpope/vim-pathogen) if you don't know what it is yet.
-
-``` sh
-cd ~/.vim/
-git submodule add git://github.com/chikamichi/mediawiki.vim.git bundle/mediawiki
-```
-
-### Manual install
+You can use Pathogen, Vundle or any plugin manager you like. Or you can install by hand:
 
 ``` sh
 cd ~/.local/src

@@ -118,7 +118,7 @@ endif
 "
 " With wikiPre, indented lines would be rendered differently from
 " unindented lines.
-sy match htmlPreTag       /<pre>/         contains=htmlTag
+sy match htmlPreTag       /<pre\>[^>]*>/         contains=htmlTag
 sy match htmlPreEndTag    /<\/pre>/       contains=htmlEndTag
 sy match wikiNowikiTag    /<nowiki>/      contains=htmlTag
 sy match wikiNowikiEndTag /<\/nowiki>/    contains=htmlEndTag
@@ -130,7 +130,7 @@ sy match wikiSyntaxHLEndTag /<\/syntaxhighlight>/    contains=htmlEndTag
 " Note: Cannot use 'start="<pre>"rs=e', so still have the <pre> tag
 " highlighted correctly via separate sy-match. Unfortunately, this will
 " also highlight <pre> tags inside the preformatted region.
-sy region htmlPre    start="<pre>"                 end="<\/pre>"me=e-6    contains=htmlPreTag
+sy region htmlPre    start="<pre\>[^>]*>"                 end="<\/pre>"me=e-6    contains=htmlPreTag
 sy region wikiNowiki start="<nowiki>"              end="<\/nowiki>"me=e-9 contains=wikiNowikiTag
 sy region wikiSource start="<source\s\+[^>]\+>"         keepend end="<\/source>"me=e-9 contains=wikiSourceTag
 sy region wikiSyntaxHL start="<syntaxhighlight\s\+[^>]\+>" keepend end="<\/syntaxhighlight>"me=e-18 contains=wikiSyntaxHLTag
@@ -138,6 +138,28 @@ sy region wikiSyntaxHL start="<syntaxhighlight\s\+[^>]\+>" keepend end="<\/synta
 sy include @TeX syntax/tex.vim
 sy region wikiTeX matchgroup=htmlTag start="<math>" end="<\/math>"  contains=@texMathZoneGroup,wikiNowiki,wikiNowikiEndTag
 sy region wikiRef matchgroup=htmlTag start="<ref>"  end="<\/ref>"   contains=wikiNowiki,wikiNowikiEndTag
+
+sy cluster wikiText contains=wikiLink,wikiTemplate,wikiNowiki,wikiNowikiEndTag,wikiItalic,wikiBold,wikiBoldAndItalic
+
+" Tables
+sy cluster wikiTableFormat contains=wikiTemplate,htmlString,htmlArg,htmlValue
+sy region wikiTable matchgroup=wikiTableSeparator start="{|" end="|}" contains=wikiTableHeaderLine,wikiTableCaptionLine,wikiTableNewRow,wikiTableHeadingCell,wikiTableNormalCell,@wikiText
+sy match  wikiTableSeparator /^!/ contained
+sy match  wikiTableSeparator /^|/ contained
+sy match  wikiTableSeparator /^|[+-]/ contained
+sy match  wikiTableSeparator /||/ contained
+sy match  wikiTableSeparator /!!/ contained
+sy match  wikiTableFormatEnd /[!|]/ contained
+sy match  wikiTableHeadingCell /\(^!\|!!\)\([^!|]*|\)\?.*/ contains=wikiTableSeparator,@wikiText,wikiTableHeadingFormat
+" Require at least one '=' in the format, to avoid spurious matches (e.g.
+" the | in [[foo|bar]] might be taken as the final |, indicating the beginning
+" of the cell). The same is done for wikiTableNormalFormat below.
+sy match  wikiTableHeadingFormat /\%(^!\|!!\)[^!|]\+=[^!|]\+\([!|]\)\(\1\)\@!/me=e-1 contains=@wikiTableFormat,wikiTableSeparator nextgroup=wikiTableFormatEnd
+sy match  wikiTableNormalCell /\(^|\|||\)\([^|]*|\)\?.*/ contains=wikiTableSeparator,@wikiText,wikiTableNormalFormat
+sy match  wikiTableNormalFormat /\(^|\|||\)[^|]\+=[^|]\+||\@!/me=e-1 contains=@wikiTableFormat,wikiTableSeparator nextgroup=wikiTableFormatEnd
+sy match  wikiTableHeaderLine /\(^{|\)\@<=.*$/ contained contains=@wikiTableFormat
+sy match  wikiTableCaptionLine /^|+.*$/ contained contains=wikiTableSeparator,@wikiText
+sy match  wikiTableNewRow /^|-.*$/ contained contains=wikiTableSeparator,@wikiTableFormat
 
 sy cluster wikiTop contains=@Spell,wikiLink,wikiNowiki,wikiNowikiEndTag
 
@@ -157,6 +179,7 @@ sy region wikiH6 start="^======" end="======" oneline contains=@wikiTop
 
 sy region wikiLink start="\[\[" end="\]\]\(s\|'s\|es\|ing\|\)" oneline contains=wikiLink,wikiNowiki,wikiNowikiEndTag
 
+sy region wikiLink start="https\?://" end="\W*\_s"me=s-1 oneline
 sy region wikiLink start="\[http:"   end="\]" oneline contains=wikiNowiki,wikiNowikiEndTag
 sy region wikiLink start="\[https:"  end="\]" oneline contains=wikiNowiki,wikiNowikiEndTag
 sy region wikiLink start="\[ftp:"    end="\]" oneline contains=wikiNowiki,wikiNowikiEndTag
@@ -164,7 +187,9 @@ sy region wikiLink start="\[gopher:" end="\]" oneline contains=wikiNowiki,wikiNo
 sy region wikiLink start="\[news:"   end="\]" oneline contains=wikiNowiki,wikiNowikiEndTag
 sy region wikiLink start="\[mailto:" end="\]" oneline contains=wikiNowiki,wikiNowikiEndTag
 
-sy region wikiTemplate start="{{" end="}}" contains=wikiNowiki,wikiNowikiEndTag
+sy match  wikiTemplateName /{{\s*\w\+/hs=s+2 contained
+sy region wikiTemplate start="{{" end="}}" keepend extend contains=wikiNowiki,wikiNowikiEndTag,wikiTemplateName,wikiTemplateParam,wikiTemplate,wikiLink
+sy region wikiTemplateParam start="{{{\s*\d" end="}}}" extend contains=wikiTemplateName
 
 sy match wikiParaFormatChar /^[\:|\*|;|#]\+/
 sy match wikiParaFormatChar /^-----*/
@@ -274,12 +299,19 @@ HtmlHiLink wikiH6 htmlTitle
 
 HtmlHiLink wikiLink           htmlLink
 HtmlHiLink wikiTemplate       htmlSpecial
+HtmlHiLink wikiTemplateParam  htmlSpecial
+HtmlHiLink wikiTemplateName   Type
 HtmlHiLink wikiParaFormatChar htmlSpecial
 HtmlHiLink wikiPre            htmlConstant
 HtmlHiLink wikiRef            htmlComment
 
+HtmlHiLink htmlPre            wikiPre
 HtmlHiLink wikiSource         wikiPre
 HtmlHiLink wikiSyntaxHL       wikiPre
+
+HtmlHiLink wikiTableSeparator Statement
+HtmlHiLink wikiTableFormatEnd wikiTableSeparator
+HtmlHiLink wikiTableHeadingCell htmlBold
 
 
 let b:current_syntax = "html"

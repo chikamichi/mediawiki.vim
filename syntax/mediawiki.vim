@@ -23,7 +23,7 @@ if !exists("main_syntax")
   elseif exists("b:current_syntax")
     finish
   endif
-  let main_syntax = "html"
+  let main_syntax = "mediawiki"
 endif
 
 syntax case ignore
@@ -136,6 +136,7 @@ sy region wikiSource start="<source\s\+[^>]\+>"         keepend end="<\/source>"
 sy region wikiSyntaxHL start="<syntaxhighlight\s\+[^>]\+>" keepend end="<\/syntaxhighlight>"me=e-18 contains=wikiSyntaxHLTag
 
 sy include @TeX syntax/tex.vim
+unlet b:current_syntax
 sy region wikiTeX matchgroup=htmlTag start="<math>" end="<\/math>"  contains=@texMathZoneGroup,wikiNowiki,wikiNowikiEndTag
 sy region wikiRef matchgroup=htmlTag start="<ref>"  end="<\/ref>"   contains=wikiNowiki,wikiNowikiEndTag
 
@@ -314,11 +315,11 @@ HtmlHiLink wikiTableFormatEnd wikiTableSeparator
 HtmlHiLink wikiTableHeadingCell htmlBold
 
 
-let b:current_syntax = "html"
+let b:current_syntax = "mediawiki"
 
 delcommand HtmlHiLink
 
-if main_syntax == "html"
+if main_syntax == "mediawiki"
   unlet main_syntax
 endif
 

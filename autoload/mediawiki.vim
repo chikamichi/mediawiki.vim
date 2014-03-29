@@ -115,7 +115,6 @@ function! mediawiki#IncludeSyntax(filetype, groupName)
         unlet b:current_syntax
     endif
 
-    echom '-- Including ' . a:filetype
     exe 'syntax include @' . a:groupName . ' syntax/' . a:filetype . '.vim'
 
     " Restore b:current_syntax
@@ -156,7 +155,6 @@ endfunction
 
 " Perform highlighting
 function! mediawiki#PerformHighlighting()
-    echom '==== PerformHighlighting ===='
     " Apply user overrides
     call extend(s:mediawiki_wikilang_to_vim, g:mediawiki_wikilang_to_vim_overrides)
 
@@ -169,7 +167,6 @@ function! mediawiki#PerformHighlighting()
     let alreadyIncludedFt = {}
     " Load languages
     for wikiLang in mediawiki#FindLanguagesInBuffer() + g:mediawiki_forced_wikilang
-        echom 'Language: ' . wikiLang
         if has_key(ignoredDict, wikiLang)
             continue
         endif

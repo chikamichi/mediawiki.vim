@@ -79,9 +79,9 @@ setlocal fdm=expr
 
 ### Credits, licence
 
-See comments within `syntax/vim-mediawiki.vim`. Basically this is public domain.
+See comments within `syntax/mediawiki.vim`. Basically this is public domain.
 
-Thanks to folks at http://en.wikipedia.org/wiki/Wikipedia:Text_editor_support!
+Thanks to folks at http://en.wikipedia.org/wiki/Wikipedia:Text_editor_support !
 
 Static releases available at http://www.vim.org/scripts/script.php?script_id=3970.
 
